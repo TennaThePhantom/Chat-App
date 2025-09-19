@@ -13,6 +13,8 @@
 		"resolveJsonModule": true,
 		"declaration": true,
 		"sourceMap": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
 		"ignoreDeprecations": "6.0"
 	},
 	"include": ["src/**/*"],
