@@ -3,21 +3,19 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.ts";
 import express, { Router, Request, Response } from "express";
 
-interface SignupRequestBody {
+interface UserAuthRequestBody {
 	fullName: string;
 	email: string;
 	password: string;
 }
 
 export const signup = async (
-	req: Request<{}, {}, SignupRequestBody>,
+	req: Request<{}, {}, UserAuthRequestBody>,
 	res: Response
 ) => {
 	const { fullName, email, password } = req.body;
 	if (!fullName || !email || !password) {
-		return res
-			.status(400)
-			.json({ message: "All fields are required!" });
+		return res.status(400).json({ message: "All fields are required!" });
 	}
 	try {
 		if (password.length < 6) {
@@ -51,16 +49,49 @@ export const signup = async (
 				profilePicture: newUser.profilePicture,
 			});
 		}
-	} catch (error) {
+	} catch (error: any) {
 		console.log("Error in signup:", error);
 		res.status(500).json({ message: "Server error" });
 	}
 };
 
-export const login = (req: Request, res: Response) => {
-	res.send("login route");
+export const login = async (
+	req: Request<{}, {}, UserAuthRequestBody>,
+	res: Response
+) => {
+	const { email, password } = req.body;
+	try {
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(400).json({ message: "Invalid email or password" });
+		}
+
+		const isPasswordCorrect = await bcrypt.compare(password, user.password);
+		if (!isPasswordCorrect) {
+			return res.status(400).json({ message: "Invalid email or password" });
+		}
+
+		generateToken(user._id, res);
+
+		res.status(200).json({
+			_id: user._id,
+			fullName: user.fullName,
+			email: user.email,
+			profilePicture: user.profilePicture,
+		});
+	} catch (error: any) {
+		console.log("Error in Login controller", error.message);
+		res.status(500).json({ message: "Server error" });
+	}
 };
 
 export const logout = (req: Request, res: Response) => {
-	res.send("logout route");
+	try {
+		res.cookie("jwt", "", { maxAge: 0 });
+		res.status(200).json({ message: "Logged out successfully" });
+	} catch (error) {
+		console.log("Error in logout:", error);
+		res.status(500).json({ message: "Sever error" });
+	}
 };
