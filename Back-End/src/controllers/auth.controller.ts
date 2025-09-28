@@ -10,7 +10,7 @@ interface UserAuthRequestBody {
 	password: string;
 }
 // Extend the Request interface to include user property(may need to add to IUser in the future if I need this again)
-interface AuthenticatedRequest extends Request {
+interface AuthenticatedRequest extends Request {// leave it like this for now until I figure out how to import IUser here
 	user?: any; // for now any because I donn't know the exact type
 }
 
