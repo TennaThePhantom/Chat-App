@@ -2,11 +2,16 @@ import User from "../models/user.model.ts";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.ts";
 import express, { Router, Request, Response } from "express";
+import cloudinary from "../lib/cloudinary.ts";
 
 interface UserAuthRequestBody {
 	fullName: string;
 	email: string;
 	password: string;
+}
+// Extend the Request interface to include user property(may need to add to IUser in the future if I need this again)
+interface AuthenticatedRequest extends Request {
+	user?: any; // for now any because I donn't know the exact type
 }
 
 export const signup = async (
@@ -95,3 +100,38 @@ export const logout = (req: Request, res: Response) => {
 		res.status(500).json({ message: "Sever error" });
 	}
 };
+
+export const updateProfile = async (
+	req: AuthenticatedRequest,
+	res: Response
+) => {
+	try {
+		const { profilePicture } = req.body;
+		const userId = req.user._id;
+
+		if (!profilePicture) {
+			return res.status(400).json({ message: "Profile picture is required" });
+		}
+
+		const uploadResponse = await cloudinary.uploader.upload(profilePicture);
+		const updatedUser = await User.findByIdAndUpdate(
+			userId,
+			{ profilePicture: uploadResponse.secure_url },
+			{ new: true }
+		);
+		res.status(200).json(updatedUser);
+	} catch (error) {
+		console.log("error in userProfile", error);
+		res.status(500).json({ message: "Internal server error" });
+	}
+};
+
+
+export const checkAuth = (req: AuthenticatedRequest, res: Response) => {
+	try {
+		res.status(200).json(req.user)
+	} catch (error) {
+		console.log("Error in checkAuth:", error);
+		res.status(500).json({ message: "Internal Server error" });
+	}
+}
