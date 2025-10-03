@@ -2,11 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.ts";
 import { Types } from "mongoose";
 import express, { Router, Request, Response } from "express";
-
-// Extend the Request interface to include user property(may need to add to IUser in the future if I need this again)
-interface AuthenticatedRequest extends Request {
-	user?: any; // for now any because I donn't know the exact type
-}
+import AuthenticatedRequest from "../@types/auth.types.ts";
 
 export const protectRoute = async (
 	req: AuthenticatedRequest,

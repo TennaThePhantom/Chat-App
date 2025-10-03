@@ -1,11 +1,10 @@
 import express, { Router, Request, Response } from "express";
+import AuthenticatedRequest from "../@types/auth.types.ts";
 import User from "../models/user.model.ts";
 import Message from "../models/message.model.ts";
 import cloudinary from "../lib/cloudinary.ts";
 
-interface AuthenticatedRequest extends Request {
-	user?: any;
-}
+
 export const getUsersForSidebar = async (
 	req: AuthenticatedRequest,
 	res: Response

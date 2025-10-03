@@ -3,16 +3,14 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.ts";
 import express, { Router, Request, Response } from "express";
 import cloudinary from "../lib/cloudinary.ts";
+import AuthenticatedRequest from "../@types/auth.types.ts";
 
 interface UserAuthRequestBody {
 	fullName: string;
 	email: string;
 	password: string;
 }
-// Extend the Request interface to include user property(may need to add to IUser in the future if I need this again)
-interface AuthenticatedRequest extends Request {// leave it like this for now until I figure out how to import IUser here
-	user?: any; // for now any because I donn't know the exact type
-}
+
 
 export const signup = async (
 	req: Request<{}, {}, UserAuthRequestBody>,
