@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { type User } from '../@types/user';
-
+import { type User } from "../@types/user";
 
 interface useAuthStoreProps {
 	authUser: User | null;
@@ -10,6 +9,7 @@ interface useAuthStoreProps {
 	isLoggingIn: boolean;
 	isUpdatingProfile: boolean;
 	isCheckingAuth: boolean;
+	onlineUsers: [] | string[];
 	checkAuth: () => Promise<void>;
 	signup: (data: unknown) => Promise<void>;
 	login: (data: unknown) => Promise<void>;
@@ -22,8 +22,9 @@ export const useAuthStore = create<useAuthStoreProps>((set) => ({
 	isSigningUp: false,
 	isLoggingIn: false,
 	isUpdatingProfile: false,
-
 	isCheckingAuth: true,
+	onlineUsers: [],
+
 	checkAuth: async () => {
 		try {
 			const res = await axiosInstance.get("/auth/check");
