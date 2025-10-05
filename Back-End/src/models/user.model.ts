@@ -7,6 +7,8 @@ interface IUser extends Document {
 	fullName: string;
 	password: string;
 	profilePicture: string;
+	createdAt: string;
+
 }
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
