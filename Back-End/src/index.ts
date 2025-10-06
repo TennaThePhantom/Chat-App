@@ -6,6 +6,7 @@ import { connectDB } from "./lib/db.ts";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+// for future increase image size limit it can only take image under 100KB Rn check notes to see fix maybe
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT;
