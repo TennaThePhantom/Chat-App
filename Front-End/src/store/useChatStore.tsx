@@ -14,7 +14,6 @@ interface useChatStoreProps {
 	getUsers: () => Promise<void>;
 	getMessages: (userId: string) => Promise<void>;
 	setSelectedUser: (selectedUser: User | null) => void;
-
 	sendMessage: (messageData: unknown) => Promise<void>;
 	subscribeToMessages: () => void;
 	unSubscribeToMessages: () => void;
@@ -68,21 +67,23 @@ export const useChatStore = create<useChatStoreProps>((set, get) => ({
 		}
 	},
 	subscribeToMessages: () => {
-		const {selectedUser} = get()
-		if(!selectedUser) return;
+		const { selectedUser } = get();
+		if (!selectedUser) return;
 
 		const socket = useAuthStore.getState().socket;
 
 		socket?.on("newMessage", (newMessage) => {
+			const isMessageSentFromSelectedUser: boolean =
+				newMessage.senderId === selectedUser._id;
+			if (!isMessageSentFromSelectedUser) return;
 			set({
-				messages: [...get().messages, newMessage]
-			})
-		})
+				messages: [...get().messages, newMessage],
+			});
+		});
 	},
 
 	unSubscribeToMessages: () => {
-		const socket = useAuthStore.getState().socket
-		socket?.off("newMessage")
-	}
-
+		const socket = useAuthStore.getState().socket;
+		socket?.off("newMessage");
+	},
 }));

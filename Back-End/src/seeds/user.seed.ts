@@ -1,6 +1,6 @@
 // this file create 15 users for the chat app
 // the emails are fake and doesn't exist
-// if you want to add more fake users you can just follow the examples 
+// if you want to add more fake users you can just follow the examples
 // if you want to create your own use the create account feature
 
 import { config } from "dotenv";
