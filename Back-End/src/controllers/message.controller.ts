@@ -3,7 +3,7 @@ import AuthenticatedRequest from "../@types/auth.types.ts";
 import User from "../models/user.model.ts";
 import Message from "../models/message.model.ts";
 import cloudinary from "../lib/cloudinary.ts";
-
+import { getReceiverSocketId, io } from "../lib/socket.ts";
 
 export const getUsersForSidebar = async (
 	req: AuthenticatedRequest,
@@ -67,12 +67,16 @@ export const sendMessage = async (req: AuthenticatedRequest, res: Response) => {
 			image: imageUrl,
 		});
 
-        await newMessage.save();
+		await newMessage.save();
 
-        res.status(201).json(newMessage)
+		const receiverSocketId: string | string[] = getReceiverSocketId(receiverId);
+		if (receiverId) {
+			io.to(receiverSocketId).emit("newMessage", newMessage);
+		}
 
+		res.status(201).json(newMessage);
 	} catch (error) {
-        console.log("Error in sendMessage controller", error);
+		console.log("Error in sendMessage controller", error);
 		res.status(500).json({ error: "Internal sever error" });
-    }
+	}
 };

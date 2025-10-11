@@ -8,10 +8,16 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-	const { messages, getMessages, isMessagesLoading, selectedUser } =
-		useChatStore();
+	const {
+		messages,
+		getMessages,
+		isMessagesLoading,
+		selectedUser,
+		subscribeToMessages,
+		unSubscribeToMessages,
+	} = useChatStore();
 	const { authUser } = useAuthStore();
-	const messageEndRef = useRef(null);
+	const messageEndRef = useRef<HTMLDivElement>(null);
 
 	if (!selectedUser) {
 		return null; // or return a loading/empty state
@@ -19,8 +25,22 @@ const ChatContainer = () => {
 
 	useEffect(() => {
 		getMessages(selectedUser._id);
-	}, [selectedUser?._id, getMessages]);
 
+		subscribeToMessages();
+
+		return () => unSubscribeToMessages();
+	}, [
+		selectedUser?._id,
+		getMessages,
+		subscribeToMessages,
+		unSubscribeToMessages,
+	]);
+
+	useEffect(() => {
+		if (messageEndRef.current && messages) {
+			messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+		}
+	}, [messages]);
 	if (isMessagesLoading) {
 		return (
 			<div className="flex-1 flex flex-col overflow-auto">
