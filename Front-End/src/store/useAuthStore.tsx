@@ -13,7 +13,6 @@ interface useAuthStoreProps {
 	isCheckingAuth: boolean;
 	onlineUsers: [] | string[];
 	socket: Socket | null;
-
 	checkAuth: () => Promise<void>;
 	signup: (data: unknown) => Promise<void>;
 	login: (data: unknown) => Promise<void>;
@@ -36,6 +35,7 @@ export const useAuthStore = create<useAuthStoreProps>((set, get) => ({
 		try {
 			const res = await axiosInstance.get("/auth/check");
 			set({ authUser: res.data });
+			get().connectSocket();
 		} catch (error) {
 			console.log("error in checkAuth", error);
 			set({ authUser: null });
@@ -96,12 +96,20 @@ export const useAuthStore = create<useAuthStoreProps>((set, get) => ({
 	},
 	connectSocket: () => {
 		const { authUser } = get();
-		if (!authUser || (get().socket as any)?.connected) return;
+		if (!authUser || get().socket?.connected) return;
 
-		const socket = io(BASE_URL);
+		const socket = io(BASE_URL, {
+			query: {
+				userId: authUser?._id,
+			},
+		});
 		socket.connect();
 
 		set({ socket: socket });
+
+		socket.on("getOnlineUsers", (userIds) => {
+			set({ onlineUsers: userIds });
+		});
 	},
 	disconnectSocket: () => {
 		if (get().socket?.connected) {
