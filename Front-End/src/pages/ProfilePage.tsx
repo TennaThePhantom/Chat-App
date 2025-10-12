@@ -4,7 +4,7 @@ import { useState, type ChangeEvent } from "react";
 
 const ProfilePage = () => {
 	const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
-	const [selectedImg, setSelectedImg] = useState(null);
+	const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
 	const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
@@ -17,6 +17,8 @@ const ProfilePage = () => {
 
 		reader.onload = async () => {
 			const base64Image = reader.result;
+			setSelectedImg(base64Image as string);
+
 			await updateProfile({ profilePicture: base64Image });
 		};
 	};
@@ -35,7 +37,7 @@ const ProfilePage = () => {
 					<div className="flex flex-col items-center gap-4">
 						<div className="relative">
 							<img
-								src={authUser?.profilePicture || "/avatar.png"}
+								src={selectedImg || authUser?.profilePicture || "/avatar.png"}
 								alt="Profile"
 								className="size-32 rounded-full object-cover border-4 "
 							/>
