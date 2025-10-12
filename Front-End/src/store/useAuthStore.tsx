@@ -4,7 +4,8 @@ import toast from "react-hot-toast";
 import { type User } from "../@types/user";
 import { io, Socket } from "socket.io-client";
 
-const BASE_URL: string = "http://localhost:5001";
+const BASE_URL: string =
+	import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 interface useAuthStoreProps {
 	authUser: User | null;
 	isSigningUp: boolean;
