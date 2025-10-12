@@ -1,11 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
-import authRoutes from "./routes/auth.route.ts";
-import messageRoutes from "./routes/message.route.ts";
-import { connectDB } from "./lib/db.ts";
+import authRoutes from "./routes/auth.route.js";
+import messageRoutes from "./routes/message.route.js";
+import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app, server } from "./lib/socket.ts";
+import { app, server } from "./lib/socket.js";
 import path from "path";
 
 // for future increase image size limit it can only take image under 100KB Rn check notes to see fix maybe

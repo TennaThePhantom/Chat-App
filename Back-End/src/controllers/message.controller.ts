@@ -1,9 +1,9 @@
 import express, { Router, Request, Response } from "express";
-import AuthenticatedRequest from "../@types/auth.types.ts";
-import User from "../models/user.model.ts";
-import Message from "../models/message.model.ts";
-import cloudinary from "../lib/cloudinary.ts";
-import { getReceiverSocketId, io } from "../lib/socket.ts";
+import AuthenticatedRequest from "../@types/auth.types.js";
+import User from "../models/user.model.js";
+import Message from "../models/message.model.js";
+import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getUsersForSidebar = async (
 	req: AuthenticatedRequest,

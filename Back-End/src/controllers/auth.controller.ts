@@ -1,9 +1,9 @@
-import User from "../models/user.model.ts";
+import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { generateToken } from "../lib/utils.ts";
+import { generateToken } from "../lib/utils.js";
 import express, { Router, Request, Response } from "express";
-import cloudinary from "../lib/cloudinary.ts";
-import AuthenticatedRequest from "../@types/auth.types.ts";
+import cloudinary from "../lib/cloudinary.js";
+import AuthenticatedRequest from "../@types/auth.types.js";
 
 interface UserAuthRequestBody {
 	fullName: string;

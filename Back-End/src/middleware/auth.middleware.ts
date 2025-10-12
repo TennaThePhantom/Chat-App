@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.ts";
+import User from "../models/user.model.js";
 import { Types } from "mongoose";
 import express, { Router, Request, Response } from "express";
-import AuthenticatedRequest from "../@types/auth.types.ts";
+import AuthenticatedRequest from "../@types/auth.types.js";
 
 export const protectRoute = async (
 	req: AuthenticatedRequest,
