@@ -8,12 +8,12 @@ import cors from "cors";
 import { app, server } from "./lib/socket.js";
 import path from "path";
 
-// for future increase image size limit it can only take image under 100KB Rn check notes to see fix maybe
 dotenv.config();
 const PORT = process.env.PORT;
 const __dirname = path.resolve();
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb"}));
+app.use(express.urlencoded({extended: true, limit: "10mb"}))
 app.use(cookieParser());
 app.use(
 	cors({
