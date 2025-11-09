@@ -5,7 +5,7 @@ interface ThemeStoreProps {
 	setTheme(theme: string): void;
 }
 export const useThemeStore = create<ThemeStoreProps>((set) => ({
-	theme: localStorage.getItem("chat-theme") || "coffee",
+	theme: localStorage.getItem("chat-theme") || "dim",
 	setTheme: (theme) => {
 		localStorage.setItem("chat-theme", theme);
 		set({ theme });
