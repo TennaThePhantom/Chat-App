@@ -20,9 +20,8 @@ A real-time chat application built with React, TypeScript, Node.js, and Socket.i
 
 
 
-## 🛠 Tech Stack
 
-# Frontend
+# 💻 Frontend
 - React 19 - Latest React with modern features
 
 - TypeScript - Type-safe development
@@ -45,7 +44,7 @@ A real-time chat application built with React, TypeScript, Node.js, and Socket.i
 
 - React Hot Toast - Toast notifications
 
-# Backend
+# 🛠️ Backend
 - Node.js & Express 5 - Server runtime and framework
 
 - TypeScript - Type-safe Node.js development
